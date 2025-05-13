@@ -43,9 +43,10 @@ A Django REST API for managing church livestream subscriptions, including Stripe
    TWILIO_PHONE_NUMBER=+1234567890
    ```
 
-5. Apply migrations:
+5. Create and Apply migrations:
 
    ```
+   python manage.py makemigrations
    python manage.py migrate
    ```
 
@@ -64,7 +65,7 @@ A Django REST API for managing church livestream subscriptions, including Stripe
 8. In a separate terminal, start Redis and Celery worker:
    ```
    redis-server
-   celery -A churchpad worker -l info
+   celery -A churchpad worker -l info # On Windows: celery -A churchpad worker --pool=solo
    ```
 
 ## API Endpoints
@@ -114,15 +115,31 @@ python manage.py test
 
 ## Postman Collection
 
-A Postman collection is included for testing all endpoints. Import the `ChurchPad API.postman_collection.json` file into Postman.
+A Postman collection is included for testing all endpoints. Import the ChurchPad API.postman_collection.json file into Postman
+
+### Collection Link
+
+You can view the Postman collection documentation [here](https://documenter.getpostman.com/view/32765991/2sB2jAcoPy).
+
+### How to Use
+
+1. Download the Postman collection file: `ChurchPad API.postman_collection.json`.
+2. Open Postman.
+3. Click on **Import** in the top left corner.
+4. Select the `ChurchPad API.postman_collection.json` file from your local machine.
 
 ## Notes
 
-- This project uses a test Stripe key. In production, use a proper Stripe account.
-- For production, disable Django's DEBUG mode and use a production-ready database like PostgreSQL.
+- This project uses a test Stripe key.
 - The Celery worker needs to be running to send SMS notifications.
 
-# .env (should be included in .gitignore for a real project)
+# .env
+
+You can create your own .env file by copying the provided example:
+
+```
+/.env.example
+```
 
 STRIPE_API_KEY=sk_test_yourtestkeyhere
 STRIPE_WEBHOOK_SECRET=whsec_yoursecrethere

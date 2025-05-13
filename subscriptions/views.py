@@ -35,14 +35,13 @@ class SubscribeAPIView(APIView):
                     name=serializer.validated_data['name'],
                     phone=serializer.validated_data['phone_number'],
                     # Use a token directly - this is a test token that always works
-                    source="tok_visa"  # This represents a Visa card
+                    source="tok_visa"
                 )
                 
                 # Create a Stripe subscription
                 stripe_subscription = stripe.Subscription.create(
                     customer=customer.id,
                     items=[{'price': plan.stripe_price_id}]
-                    # No need to specify payment method as it's already set via source
                 )
                 
                 # Save subscription to database
@@ -138,7 +137,7 @@ def stripe_webhook(request):
     
     if event_type == 'customer.subscription.deleted':
         subscription_id = event_object['id']
-        # Update your database
+        # Update database
         subscription = Subscription.objects.filter(stripe_subscription_id=subscription_id).first()
         if subscription:
             subscription.active = False
@@ -147,6 +146,5 @@ def stripe_webhook(request):
 
         else:
             logger.warning(f"Subscription {subscription_id} not found in database")    
-    # Add other event handlers here
     
     return HttpResponse(status=200)
